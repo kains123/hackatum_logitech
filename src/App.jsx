@@ -3,8 +3,11 @@ import React, {
   useCallback,
   useRef,
   useState,
+  useEffect
 } from 'react';
 import SceneCanvas from './SceneCanvas.jsx';
+import { ThreeCanvas } from './components/ThreeCanvas.jsx';
+import { useMxConsole } from './hooks/useMxConsole.js';
 
 const toRad = (deg) => (deg * Math.PI) / 180;
 
@@ -46,12 +49,14 @@ export default function App() {
   const [isRaining, setIsRaining] = useState(false);
   const [rainSpeed, setRainSpeed] = useState(0.5); // 0.1–1
   const [undoStack, setUndoStack] = useState([]);
-
+  const [objUrl, setObjUrl] = useState(null);
+  const [modelName, setModelName] = useState('');
   const fileInputRef = useRef(null);
   const sceneRef = useRef(null);
 
   const selectedObject = objects.find((o) => o.id === selectedId) || null;
-
+  const mx = useMxConsole();
+  const { pushEvent, activeEvent } = useMxConsole();
   // ---- Undo management ----
   const pushUndo = useCallback(() => {
     const snapshot = {
@@ -214,6 +219,12 @@ export default function App() {
     setIsRaining((prev) => !prev);
   };
 
+  useEffect(() => {
+    if (activeEvent) {
+      console.log('New active event:', activeEvent.value);
+    }
+  }, [activeEvent]);
+
   return (
     <div className="min-h-screen flex flex-col bg-slate-950 text-slate-100">
       {/* Top bar: import + asset buttons */}
@@ -292,7 +303,7 @@ export default function App() {
             rainSpeed={rainSpeed}
             onBeginTransform={pushUndo}
           />
-
+          <ThreeCanvas objUrl={objUrl} modelName={modelName} activeEvent={activeEvent} />
           {/* Make it rain button */}
           <button
             type="button"
