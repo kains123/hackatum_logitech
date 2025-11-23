@@ -1,16 +1,71 @@
-# React + Vite
+# obj-rain
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**obj-rain** is a small Vite + React prototype that includes an interactive canvas component (`SceneCanvas.jsx`) and a lightweight debugging hook (`useMxConsole.js`). It's set up with Tailwind CSS and ESLint and is intended as a starting point for experiments with realtime or WebGL-based scenes.
 
-Currently, two official plugins are available:
+**Quick Start**
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Prerequisites**: Node.js (16+ recommended) and `npm` or `pnpm`.
+- **Install dependencies**: `npm install`
+- **Start dev server**: `npm run dev`
+- **Build for production**: `npm run build`
+- **Preview production build**: `npm run preview`
 
-## React Compiler
+**What you'll find**
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Tech stack**: Vite, React (JSX), Tailwind CSS, ESLint
+- **Entry point**: `src/main.jsx`
+- **App root**: `src/App.jsx`
+- **Interactive canvas**: `src/SceneCanvas.jsx` (main scene component)
+- **Custom hooks**: `src/hooks/useMxConsole.js` (developer console / debug helper)
+- **Assets**: `src/assets/` (models, textures, images)
 
-## Expanding the ESLint configuration
+**Repository Layout**
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- `index.html`: App HTML shell
+- `package.json`: Scripts and dependencies
+- `vite.config.js`: Vite configuration
+- `tailwind.config.cjs`: Tailwind configuration
+- `eslint.config.js`: ESLint configuration
+- `src/`: Source files
+	- `main.jsx`: App bootstrap
+	- `App.jsx`: Top-level React component
+	- `SceneCanvas.jsx`: Canvas / scene component
+	- `assets/`: Static assets used by the scene
+	- `hooks/useMxConsole.js`: Small debugging hook
+
+**Development Notes**
+
+- Editing `src/SceneCanvas.jsx` should hot-reload the scene in development.
+- Place static models or textures in `src/assets/` and import them into `SceneCanvas.jsx` or other components.
+- Tailwind is configured — update `tailwind.config.cjs` to change theme, safelist, or plugins.
+
+**Scripts** (typical; verify in `package.json`)
+
+- `npm run dev`: Starts Vite dev server with HMR.
+- `npm run build`: Produces a production build in `dist/`.
+- `npm run preview`: Serves the production build locally for testing.
+
+**Troubleshooting**
+
+- If the dev server port is in use, set a different port: `npm run dev -- --port 5174`.
+- If assets fail to load, confirm their paths under `src/assets/` and any loaders used in the scene component.
+
+**Contributing**
+
+- Open a branch for features or fixes and submit a pull request.
+- Keep changes focused and document notable additions in this `README.md` or via PR description.
+
+**License & Contact**
+
+- Add a `LICENSE` file to declare the project's license. If this is a hackathon prototype, consider `MIT` for simplicity.
+- For questions, contact the repo owner or open an issue in the repository.
+
+---
+
+If you'd like, I can also:
+
+- Add a small usage example in `src/SceneCanvas.jsx` README section.
+- Create a `CONTRIBUTING.md` with PR guidelines.
+- Run the dev server here and confirm HMR works.
+
+
