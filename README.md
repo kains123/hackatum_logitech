@@ -1,3 +1,38 @@
+# LogiCreate — Interactive 3D with Logitech Devices
+
+![Hackatum demo](./hackatum.gif)
+
+<sub>If the demo GIF does not show, place `hackatum.gif` in the repository `public/` folder (`public/hackatum.gif`).</sub>
+
+Inspiration
+
+We wanted to make creating interactive 3D content as simple as using the Logitech devices creators already love, because we believe the next generation of content—after YouTube and short-form—is fully interactive.
+
+What it does
+
+LogiCreate lets creators control, build, and interact with 3D scenes directly through customized Logitech device actions.
+
+How we built it
+
+We developed a Logitech plugin that maps device inputs to real-time 3D engine controls for importing, positioning, and interacting with assets.
+
+Challenges we ran into
+
+Our biggest challenge was synchronizing device events with smooth, low-latency actions inside the 3D environment.
+
+Accomplishments that we're proud of
+
+We’re proud that creators can now prototype interactive 3D content with physical controls instead of complex software menus.
+
+What we learned
+
+We learned how powerful tactile input can be in simplifying 3D creation workflows and making them more accessible.
+
+What's next for LogiCreate
+
+Next, we plan to add AI-assisted 3D generation and expand compatibility with more engines and publishing platforms.
+
+
 # obj-rain
 
 **obj-rain** is a small Vite + React prototype that includes an interactive canvas component (`SceneCanvas.jsx`) and a lightweight debugging hook (`useMxConsole.js`). It's set up with Tailwind CSS and ESLint and is intended as a starting point for experiments with realtime or WebGL-based scenes.
