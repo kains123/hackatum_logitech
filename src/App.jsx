@@ -5,8 +5,8 @@ import React, {
   useState,
   useEffect
 } from 'react';
+import * as THREE from 'three';
 import SceneCanvas from './SceneCanvas.jsx';
-import { ThreeCanvas } from './components/ThreeCanvas.jsx';
 import { useMxConsole } from './hooks/useMxConsole.js';
 
 const toRad = (deg) => (deg * Math.PI) / 180;
@@ -49,14 +49,137 @@ export default function App() {
   const [isRaining, setIsRaining] = useState(false);
   const [rainSpeed, setRainSpeed] = useState(0.5); // 0.1–1
   const [undoStack, setUndoStack] = useState([]);
-  const [objUrl, setObjUrl] = useState(null);
-  const [modelName, setModelName] = useState('');
   const fileInputRef = useRef(null);
   const sceneRef = useRef(null);
+
 
   const selectedObject = objects.find((o) => o.id === selectedId) || null;
   const mx = useMxConsole();
   const { pushEvent, activeEvent } = useMxConsole();
+
+  useEffect(() => {
+    // const evt = mx.activeEvent;
+    // console.log("Active Event in App.jsx:", activeEvent);
+    if (!!activeEvent) {
+      if (!!activeEvent && activeEvent.type == "pressCountX") {
+        console.log(activeEvent.type +"*******");
+        if (!selectedObject) return;
+        setObjects((prev) =>
+          prev.map((o) => {
+            if (o.id !== selectedObject.id) return o;
+            const rot = [...o.rotation];
+            rot[1] += toRad(15); // 15 degrees per click
+            return { ...o, rotation: rot };
+          })
+        );
+      } else if (!!activeEvent && activeEvent.type == "pressCountY") {
+        console.log(activeEvent.type +"*******pressCountY");
+         if (!selectedObject) return;
+        setObjects((prev) =>
+          prev.map((o) => {
+            if (o.id !== selectedObject.id) return o;
+            const rot = [...o.rotation];
+            rot[0] += toRad(15); // 15 degrees per click
+            return { ...o, rotation: rot };
+          })
+        );
+      } else if (!!activeEvent && activeEvent.type == "zoom") {
+        console.log(activeEvent.type +"*******zoom");
+        if (!selectedObject) return;
+        setObjects((prev) =>
+          prev.map((o) => {
+            if (o.id !== selectedObject.id) return o;
+            const newScale = activeEvent.value;
+            return { ...o, scale: newScale };
+          })
+        );
+      }  else if (!!activeEvent && activeEvent.type == "MoveXPlus") {
+        console.log(activeEvent.type +"*******MoveXPlus");
+        if (!selectedObject) return;
+        const newPos = [selectedObject.position[0] + 0.1, selectedObject.position[1], selectedObject.position[2]];
+        setObjects((prev) =>
+          prev.map((o) =>
+               o.id === selectedObject.id ? { ...o, position: newPos } : o
+            )
+        );
+      } else if (!!activeEvent && activeEvent.type == "MoveYPlus") {
+        console.log(activeEvent.type +"*******MoveYPlus");
+        if (!selectedObject) return;
+        const newPos = [selectedObject.position[0], selectedObject.position[1] , selectedObject.position[2]+ 0.1];
+        setObjects((prev) =>
+          prev.map((o) =>
+               o.id === selectedObject.id ? { ...o, position: newPos } : o
+            )
+        );
+      } else if (!!activeEvent && activeEvent.type == "MoveYMinus") {
+        console.log(activeEvent.type +"*******MoveYPlus");
+        if (!selectedObject) return;
+        const newPos = [selectedObject.position[0], selectedObject.position[1], selectedObject.position[2]- 0.1];
+        setObjects((prev) =>
+          prev.map((o) =>
+               o.id === selectedObject.id ? { ...o, position: newPos } : o
+            )
+        );
+      } else if (!!activeEvent && activeEvent.type == "MoveXMinus") {
+        console.log(activeEvent.type +"*******MoveXMinus");
+        if (!selectedObject) return;
+        const newPos = [selectedObject.position[0] - 0.1, selectedObject.position[1], selectedObject.position[2]];
+        setObjects((prev) =>
+          prev.map((o) =>
+               o.id === selectedObject.id ? { ...o, position: newPos } : o
+            )
+        );
+      }else if (!!activeEvent && activeEvent.type == "MoveZPlus") {
+        console.log(activeEvent.type +"*******MoveZPlus");
+        if (!selectedObject) return;
+        const newPos = [selectedObject.position[0], selectedObject.position[1] +0.1, selectedObject.position[2]];
+        setObjects((prev) =>
+          prev.map((o) =>
+               o.id === selectedObject.id ? { ...o, position: newPos } : o
+            )
+        );
+      }else if (!!activeEvent && activeEvent.type == "MoveZMinus") {
+        console.log(activeEvent.type +"*******MoveYMinus");
+        if (!selectedObject) return;
+        const newPos = [selectedObject.position[0], selectedObject.position[1] - 0.1, selectedObject.position[2]];
+        setObjects((prev) =>
+          prev.map((o) =>
+               o.id === selectedObject.id ? { ...o, position: newPos } : o
+            )
+        );
+      }else if (!!activeEvent && activeEvent.type == "Copy") {
+        console.log(activeEvent.type +"*******Copy");
+        if (!selectedObject) return;
+        const id =
+          crypto.randomUUID?.() ||
+          `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+        const offset = 0.5;
+        const dup = {
+          ...selectedObject,
+          id,
+          position: [
+            selectedObject.position[0] + offset,
+            selectedObject.position[1],
+            selectedObject.position[2] + offset,
+          ],
+        };
+        setObjects((prev) => [...prev, dup]);
+        setSelectedId(id);
+        
+        
+      }else if (!!activeEvent && activeEvent.type == "Delete") {
+        console.log(activeEvent.type +"*******Delete");
+        if (!selectedObject) return;
+        setObjects((prev) =>
+          prev.filter((o) => o.id !== selectedObject.id)
+        );
+        setSelectedId(null);
+        
+        
+      }
+    } 
+  }, [activeEvent]);
+
   // ---- Undo management ----
   const pushUndo = useCallback(() => {
     const snapshot = {
@@ -219,12 +342,6 @@ export default function App() {
     setIsRaining((prev) => !prev);
   };
 
-  useEffect(() => {
-    if (activeEvent) {
-      console.log('New active event:', activeEvent.value);
-    }
-  }, [activeEvent]);
-
   return (
     <div className="min-h-screen flex flex-col bg-slate-950 text-slate-100">
       {/* Top bar: import + asset buttons */}
@@ -303,7 +420,7 @@ export default function App() {
             rainSpeed={rainSpeed}
             onBeginTransform={pushUndo}
           />
-          <ThreeCanvas objUrl={objUrl} modelName={modelName} activeEvent={activeEvent} />
+         
           {/* Make it rain button */}
           <button
             type="button"

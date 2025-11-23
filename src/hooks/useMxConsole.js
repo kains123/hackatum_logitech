@@ -43,26 +43,26 @@ export function useMxConsole() {
     wsRef.current = ws;
 
     ws.onopen = () => {
-      console.log('[MX] WebSocket connected');
+      // console.log('[MX] WebSocket connected');
       setConnectedState(true);
     };
 
     ws.onclose = () => {
-      console.log('[MX] WebSocket disconnected');
+      // console.log('[MX] WebSocket disconnected');
       setConnectedState(false);
     };
 
     ws.onerror = (err) => {
-      console.error('[MX] WebSocket error', err);
+      // console.error('[MX] WebSocket error', err);
       setConnectedState(false);
     };
 
     ws.onmessage = (event) => {
       try {
-        console.log('[MX] raw message from server:', event.data);
+        // console.log('[MX] raw message from server:', event.data);
 
         const data = JSON.parse(event.data);
-        console.log('[MX] parsed message:', data);
+        // console.log('[MX] parsed message:', data);
 
         // 👇 Use shared handler
         applyEvent(data);
