@@ -55,6 +55,7 @@ function ObjInstance({
     });
   }, [object, isSelected]);
 
+
   const handlePointerDown = (e) => {
     e.stopPropagation();
     onSelect();
